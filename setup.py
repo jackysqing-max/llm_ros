@@ -21,5 +21,6 @@ setup(
         "llm_client_node = llm_ros.llm_client_node:main",
         "llm_task_planner_node = llm_ros.llm_task_planner_node:main",
         "llm_task_cli = llm_ros.llm_task_cli:main",
+        "llm_chat_demo = llm_ros.llm_chat_demo:main",
     ]},
 )

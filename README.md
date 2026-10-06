@@ -10,7 +10,7 @@ provides the task-planning interface extracted from
 its original topic names and plan normalization helpers.
 
 [Deployment](docs/deployment.md) · [Interfaces](docs/interfaces.md) ·
-[Validation](docs/validation.md) · [Examples](docs/examples.md)
+[Validation](docs/validation.md) · [Examples](docs/examples.md) · [Chat demo](docs/chat_demo.md)
 
 ```mermaid
 flowchart LR
@@ -29,6 +29,7 @@ flowchart LR
 | `llm_client_node` | General prompt/message communication, request IDs, bounded queue, and result/error messages. |
 | `llm_task_planner_node` | Original instruction-to-plan interface with scene context, plan normalization, and optional deterministic fallback. |
 | `llm_task_cli` | Interactive or one-shot publisher for the planner interface. |
+| `llm_chat_demo` | ROS application example: one-shot questions, interactive conversation, request correlation, and timeouts. |
 | `llm_ros.http_client` | Python-standard-library HTTP client reusable without ROS. |
 | Launch and YAML profiles | Qwen3/vLLM, Responses API, and semantic RCM planning. |
 | Deployment tools | Native ROS setup, Qwen3 serving helper, endpoint check, Dockerfile, and Compose. |
@@ -63,6 +64,21 @@ only builds this package, and refuses to replace another checkout in the chosen
 workspace. To add it to an existing workspace, clone under `src/llm_ros` and run
 `python -m colcon build --symlink-install --packages-select llm_ros` with a
 ROS-compatible Python interpreter.
+
+## ROS application demo
+
+With the local model service ready, launch the bridge and a one-shot application:
+
+```bash
+ros2 launch llm_ros chat_demo.launch.py \
+  prompt:="Explain what a ROS 2 node is in one sentence."
+```
+
+For an interactive conversation, start the normal bridge using
+`ros2 launch llm_ros llm.launch.py`, then run `ros2 run llm_ros llm_chat_demo`
+in another sourced terminal. The demo communicates through ROS topics, retains
+successful conversation turns, and prints correlated replies. Full setup, source
+code, custom endpoints, and a mock-only recipe are in the [chat demo guide](docs/chat_demo.md).
 
 ## Run without model downloads
 

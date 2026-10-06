@@ -35,6 +35,8 @@ jobs:
           /tmp/llm-venv/bin/python -m colcon test-result --verbose
           ros2 pkg executables llm_ros
           ros2 launch llm_ros llm.launch.py --show-args
+          ros2 launch llm_ros chat_demo.launch.py --show-args
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/demo_smoke_test.py"
           /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py"
           /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --protocol responses
           /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --mode planner

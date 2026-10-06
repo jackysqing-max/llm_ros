@@ -2,6 +2,9 @@
 
 Run commands from a terminal with ROS and the package's install environment sourced.
 
+For a complete application node with one-shot and interactive conversation modes,
+see the [ROS 2 chat demo](chat_demo.md) and [source code](../llm_ros/llm_chat_demo.py).
+
 ## Plain prompt and correlated request
 
 ```bash

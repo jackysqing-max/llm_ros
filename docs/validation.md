@@ -42,6 +42,33 @@ until the output budget was exhausted. Selecting `xgrammar` and
 that failure in the acceptance run. The fixed-target planner requires scene context;
 the acceptance probe publishes a visible red cube before its instruction.
 
+## Chat demo acceptance
+
+The ROS application demo was added and validated on **October 6, 2026**, using
+the same native Humble and separate Qwen3 environment described above.
+
+| Check | Result |
+| --- | --- |
+| Rebuild and installed executable discovery | Passed; `llm_chat_demo` is registered and `chat_demo.launch.py` is installed. |
+| Mock one-shot launch | Passed; reply received and both ROS nodes automatically shut down. |
+| Mock multi-turn conversation | Passed; user/assistant history appears in subsequent requests, reset clears it, and zero history turns disables retention. |
+| Mock failure handling | Passed; HTTP 503, reply timeout, and missing bridge return code 1; a failed one-shot launch also fails and stops its bridge. |
+| Real Qwen3 one-shot launch | Passed; a real reply of `READY.` was received through the ROS application and bridge. |
+| Real Qwen3 two-turn conversation | Passed; the first reply was `ACK`, and the next reply recalled `ros-demo-42` from the previous turn. |
+| Original unit tests | 35 passed after adding the demo. |
+
+Reproduce from the sourced ROS environment and repository root:
+
+```bash
+python scripts/demo_smoke_test.py
+python scripts/demo_smoke_test.py \
+  --endpoint http://127.0.0.1:8000/v1/chat/completions --model Qwen/Qwen3-4B
+```
+
+The demo acceptance script uses ROS domain 97, performs live inference only when
+given a real endpoint, and cleans up its own ROS processes. The real test used a
+cached model on port 18080; no weights were downloaded or remote APIs called.
+
 ## Reproduce
 
 From the sourced ROS environment and repository root:
@@ -82,5 +109,6 @@ on the validation host, so the Dockerfile and Compose deployment were not built 
 run there. Other ROS distributions, other GPUs/models, image inputs, sustained-load
 performance, and downstream robot execution have not been validated.
 
-GitHub Actions repeats unit tests, a fresh Humble build, and all six mock ROS smoke
-tests. It does not download weights, run GPU inference, or require API credentials.
+GitHub Actions repeats unit tests, a fresh Humble build, all six mock ROS smoke
+tests, and the installed chat demo's mock acceptance tests. It does not download
+weights, run GPU inference, or require API credentials.
