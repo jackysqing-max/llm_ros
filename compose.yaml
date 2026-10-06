@@ -1,0 +1,51 @@
+services:
+  qwen3:
+    image: vllm/vllm-openai:v0.19.0
+    profiles: [local-model]
+    network_mode: host
+    ipc: host
+    gpus: all
+    volumes:
+      - llm-hf-cache:/root/.cache/huggingface
+    command:
+      - --model
+      - ${QWEN_MODEL:-Qwen/Qwen3-4B}
+      - --served-model-name
+      - ${QWEN_SERVED_MODEL_NAME:-Qwen/Qwen3-4B}
+      - --host
+      - 127.0.0.1
+      - --port
+      - "8000"
+      - --gpu-memory-utilization
+      - "0.65"
+      - --max-model-len
+      - "4096"
+      - --generation-config
+      - vllm
+      - --reasoning-parser
+      - qwen3
+      - --structured-outputs-config.backend=xgrammar
+      - --structured-outputs-config.enable_in_reasoning=True
+      - --structured-outputs-config.disable_any_whitespace=True
+  ros:
+    build: .
+    image: llm-ros:0.1.0
+    network_mode: host
+    ipc: host
+    init: true
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    command:
+      - ros2
+      - launch
+      - llm_ros
+      - llm.launch.py
+      - mode:=${LLM_MODE:-client}
+      - backend:=${LLM_BACKEND:-qwen3}
+      - api_base_url:=${LLM_ENDPOINT:-}
+      - model:=${LLM_MODEL:-}
+volumes:
+  llm-hf-cache:

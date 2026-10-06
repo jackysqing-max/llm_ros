@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>llm_ros</name>
+  <version>0.1.0</version>
+  <description>Reusable ROS 2 HTTP LLM communication and task planning</description>
+  <maintainer email="jackysqing@gmail.com">siqin</maintainer>
+  <license>Apache-2.0</license>
+  <url type="website">https://github.com/jackysqing-max/llm_ros</url>
+  <buildtool_depend>ament_python</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>std_msgs</depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <test_depend>python3-pytest</test_depend>
+  <export><build_type>ament_python</build_type></export>
+</package>

@@ -1,0 +1,15 @@
+llm_ros
+Copyright 2026 siqin and llm_ros contributors
+
+Task planner, task-plan schemas, normalization helpers, CLI, response parsing,
+and Qwen3 serving recipe extracted/adapted from:
+https://github.com/jackysqing-max/vla_simu_workspace
+Source commit: 07e5c1e1968104af92a0ee6deabe260ac1ccb341
+Source paths: src/pybullet_ros2_sim/pybullet_ros2_sim/llm_task_planner_node.py,
+src/pybullet_ros2_sim/pybullet_ros2_sim/task_plan_utils.py,
+scripts/llm_task_cli.py, scripts/start_qwen3_vllm.sh
+Standalone extraction and communication changes were made in October 2026.
+
+This repository's ROS integration code is Apache-2.0. Model weights, vLLM, and
+external API services have separate licenses or terms. Model weights and API
+credentials are not included. This is an independent community integration.

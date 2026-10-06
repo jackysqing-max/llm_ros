@@ -1,0 +1,2 @@
+# Runtime HTTP code uses the Python standard library.
+# ROS dependencies are installed through apt/rosdep; vLLM is optional and separate.

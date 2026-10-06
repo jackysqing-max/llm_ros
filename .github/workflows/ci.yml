@@ -1,0 +1,43 @@
+name: CI
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements-test.txt
+      - run: python -m pytest -q
+      - run: python -m compileall -q llm_ros launch scripts setup.py
+      - run: bash -n scripts/setup.sh scripts/start_qwen3_vllm.sh docker/entrypoint.sh
+  ros-build:
+    runs-on: ubuntu-22.04
+    container: ros:humble-ros-base-jammy
+    steps:
+      - uses: actions/checkout@v4
+      - run: apt-get update && apt-get install -y python3-venv python3-colcon-common-extensions
+      - name: Build, test, and exercise both protocols
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          python3 -m venv --system-site-packages /tmp/llm-venv
+          /tmp/llm-venv/bin/python -m pip install -r requirements-test.txt
+          mkdir -p /tmp/llm-ws/src
+          ln -s "$GITHUB_WORKSPACE" /tmp/llm-ws/src/llm_ros
+          cd /tmp/llm-ws
+          /tmp/llm-venv/bin/python -m colcon build --packages-select llm_ros
+          source install/local_setup.bash
+          /tmp/llm-venv/bin/python -m colcon test --packages-select llm_ros --event-handlers console_direct+
+          /tmp/llm-venv/bin/python -m colcon test-result --verbose
+          ros2 pkg executables llm_ros
+          ros2 launch llm_ros llm.launch.py --show-args
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py"
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --protocol responses
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --mode planner
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --mode rcm
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --mode planner --protocol responses
+          /tmp/llm-venv/bin/python "$GITHUB_WORKSPACE/scripts/smoke_test.py" --mode rcm --protocol responses
