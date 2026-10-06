@@ -13,7 +13,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     arguments = [
-        DeclareLaunchArgument("prompt", default_value="Explain what a ROS 2 node is in one sentence."),
+        DeclareLaunchArgument("prompt", default_value="Explain what a ROS 2 node is in one sentence in English."),
         DeclareLaunchArgument("params_file", default_value=(
             get_package_share_directory("llm_ros") + "/config/client_qwen3.yaml"
         )),

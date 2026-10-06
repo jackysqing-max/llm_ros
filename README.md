@@ -71,13 +71,15 @@ With the local model service ready, launch the bridge and a one-shot application
 
 ```bash
 ros2 launch llm_ros chat_demo.launch.py \
-  prompt:="Explain what a ROS 2 node is in one sentence."
+  prompt:="Explain what a ROS 2 node is in one sentence in English."
 ```
 
 For an interactive conversation, start the normal bridge using
 `ros2 launch llm_ros llm.launch.py`, then run `ros2 run llm_ros llm_chat_demo`
 in another sourced terminal. The demo communicates through ROS topics, retains
-successful conversation turns, and prints correlated replies. Full setup, source
+successful conversation turns, and prints correlated replies. Its default system
+instruction requests English replies, and all demo prompts and interface text are
+in English. Full setup, source
 code, custom endpoints, and a mock-only recipe are in the [chat demo guide](docs/chat_demo.md).
 
 ## Run without model downloads

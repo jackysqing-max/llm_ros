@@ -16,10 +16,13 @@ from rclpy.utilities import remove_ros_args
 from std_msgs.msg import String
 
 
+DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant. Respond in English."
+
+
 class LlmChatDemo(Node):
     """An application node; llm_client_node owns HTTP transport and credentials."""
 
-    def __init__(self, *, system_prompt="You are a helpful assistant.", history_turns=4):
+    def __init__(self, *, system_prompt=DEFAULT_SYSTEM_PROMPT, history_turns=4):
         super().__init__("llm_chat_demo")
         topics = {
             "request_topic": "/llm/request_json",
@@ -124,7 +127,8 @@ def main(args=None):
                         help="Reply timeout in seconds, including time in the bridge queue")
     parser.add_argument("--discovery-timeout", type=positive_seconds, default=10.0,
                         help="Time allowed for ROS topic discovery before publishing")
-    parser.add_argument("--system-prompt", default="You are a helpful assistant.")
+    parser.add_argument("--system-prompt", default=DEFAULT_SYSTEM_PROMPT,
+                        help="System instruction; requests English replies by default")
     parser.add_argument("--history-turns", type=int, default=4,
                         help="Successful conversation turns to retain; 0 disables history")
     options = parser.parse_args(remove_ros_args(argv)[1:])

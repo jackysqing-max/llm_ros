@@ -3,6 +3,9 @@
 The demo is a ROS application node that publishes requests and subscribes to replies.
 `llm_client_node` forwards those requests to the separately running local model.
 The application contains no HTTP client, model runtime, or credentials.
+All bundled prompts, terminal messages, CLI help, comments, and examples are in
+English. The default system instruction is
+`You are a helpful assistant. Respond in English.`
 
 ```mermaid
 flowchart LR
@@ -47,7 +50,7 @@ curl --fail http://127.0.0.1:8000/health
 
 ```bash
 ros2 launch llm_ros chat_demo.launch.py \
-  prompt:="Explain what a ROS 2 node is in one sentence."
+  prompt:="Explain what a ROS 2 node is in one sentence in English."
 ```
 
 This starts the bridge and demo, waits for ROS discovery, sends a request, prints
@@ -58,7 +61,7 @@ topics remain available for a separately running bridge.
 Example output; generated text depends on the model:
 
 ```text
-[USER] Explain what a ROS 2 node is in one sentence.
+[USER] Explain what a ROS 2 node is in one sentence in English.
 [REQUEST] <unique request ID>
 [STATUS] queued
 [STATUS] running
@@ -110,7 +113,7 @@ ros2 run llm_ros llm_chat_demo --once "Reply with READY." --timeout 120
 # Disable conversation history.
 ros2 run llm_ros llm_chat_demo --history-turns 0
 # Choose a system instruction and retain two previous turns.
-ros2 run llm_ros llm_chat_demo --system-prompt "Answer concisely." --history-turns 2
+ros2 run llm_ros llm_chat_demo --system-prompt "Answer concisely in English." --history-turns 2
 ```
 
 The standalone node uses `/llm/request_json`, `/llm/response_json`, and `/llm/status`.
